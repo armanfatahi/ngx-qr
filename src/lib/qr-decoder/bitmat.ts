@@ -1,8 +1,8 @@
 /*
-  Ported to JavaScript by Lazar Laszlo 2011 
-  
+  Ported to JavaScript by Lazar Laszlo 2011
+
   lazarsoft@gmail.com, www.lazarsoft.info
-  
+
 */
 
 /*
@@ -23,100 +23,86 @@
 */
 
 
-export class BitMatrix{
-	width:number;
+export class BitMatrix {
+	width: number;
 	height: number;
 	rowSize: number;
 	bits: any;
-	constructor(width: number, height?: number){
-		if(!height)
-			height=width;
-		if (width < 1 || height < 1)
-		{
-			throw "Both dimensions must be greater than 0";
+	constructor(width: number, height?: number) {
+		if (!height) {
+			height = width;
+		}
+		if (width < 1 || height < 1) {
+			throw new Error('Both dimensions must be greater than 0');
 		}
 		this.width = width;
 		this.height = height;
 		this.rowSize = width >> 5;
-		if ((width & 0x1f) != 0)
-		{
+		if ((width & 0x1f) != 0) {
 			this.rowSize++;
 		}
 		this.bits = new Array(this.rowSize * height);
-		for(var i=0;i<this.bits.length;i++)
-			this.bits[i]=0;
-	}
-
-
-	get Width(): number{
-		return this.width;
-	};
-	get Height(): number
-	{
-		return this.height;
-	};
-	get Dimension(): number
-	{
-		if (this.width != this.height)
-		{
-			throw "Can't call getDimension() on a non-square matrix";
-		}
-		return this.width;
-	};
-
-	URShift( number:any,  bits:any):any
-	{
-		if (number >= 0)
-			return number >> bits;
-		else
-			return (number >> bits) + (2 << ~bits);
-	}
-
-
-	get_Renamed( x: any,  y: any): any
-	{
-		var offset = y * this.rowSize + (x >> 5);
-		return ((this.URShift(this.bits[offset], (x & 0x1f))) & 1) != 0;
-	}
-	set_Renamed( x: any,  y: any): any
-	{
-		var offset = y * this.rowSize + (x >> 5);
-		this.bits[offset] |= 1 << (x & 0x1f);
-	}
-	flip( x: any,  y: any): void
-	{
-		var offset = y * this.rowSize + (x >> 5);
-		this.bits[offset] ^= 1 << (x & 0x1f);
-	}
-	clear(): void
-	{
-		var max = this.bits.length;
-		for (var i = 0; i < max; i++)
-		{
+		for (let i = 0; i < this.bits.length; i++) {
 			this.bits[i] = 0;
 		}
 	}
-	setRegion( left: any,  top: any,  width: any,  height: any): void
-	{
-		if (top < 0 || left < 0)
-		{
-			throw "Left and top must be nonnegative";
+
+
+	get Width(): number {
+		return this.width;
+	}
+	get Height(): number {
+		return this.height;
+	}
+	get Dimension(): number {
+		if (this.width != this.height) {
+			throw new Error('Can\'t call getDimension() on a non-square matrix');
 		}
-		if (height < 1 || width < 1)
-		{
-			throw "Height and width must be at least 1";
+		return this.width;
+	}
+
+	URShift( number: any,  bits: any): any {
+		if (number >= 0) {
+			return number >> bits;
+		} else {
+			return (number >> bits) + (2 << ~bits);
 		}
-		var right = left + width;
-		var bottom = top + height;
-		if (bottom > this.height || right > this.width)
-		{
-			throw "The region must fit inside the matrix";
+	}
+
+
+	get_Renamed( x: any,  y: any): any {
+		const offset = y * this.rowSize + (x >> 5);
+		return ((this.URShift(this.bits[offset], (x & 0x1f))) & 1) != 0;
+	}
+	set_Renamed( x: any,  y: any): any {
+		const offset = y * this.rowSize + (x >> 5);
+		this.bits[offset] |= 1 << (x & 0x1f);
+	}
+	flip( x: any,  y: any): void {
+		const offset = y * this.rowSize + (x >> 5);
+		this.bits[offset] ^= 1 << (x & 0x1f);
+	}
+	clear(): void {
+		const max = this.bits.length;
+		for (let i = 0; i < max; i++) {
+			this.bits[i] = 0;
 		}
-		for (var y = top; y < bottom; y++)
-		{
-			var offset = y * this.rowSize;
-			for (var x = left; x < right; x++)
-			{
+	}
+	setRegion( left: any,  top: any,  width: any,  height: any): void {
+		if (top < 0 || left < 0) {
+			throw new Error('Left and top must be nonnegative');
+		}
+		if (height < 1 || width < 1) {
+			throw new Error('Height and width must be at least 1');
+		}
+		const right = left + width;
+		const bottom = top + height;
+		if (bottom > this.height || right > this.width) {
+			throw new Error('The region must fit inside the matrix');
+		}
+		for (let y = top; y < bottom; y++) {
+			const offset = y * this.rowSize;
+			for (let x = left; x < right; x++) {
 				this.bits[offset + (x >> 5)] |= 1 << (x & 0x1f);
 			}
 		}

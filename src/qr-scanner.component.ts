@@ -3,8 +3,8 @@ import {
     Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output,
     ViewChild, Renderer2
 } from '@angular/core';
-import {Subject, Subscription} from 'rxjs';
-import {QRCode} from './lib/qr-decoder/qrcode';
+import { Subject, Subscription } from 'rxjs';
+import { QRCode } from './lib/qr-decoder/qrcode';
 
 @Component({
     selector: 'qr-scanner',
@@ -50,7 +50,7 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
     public qrCode: QRCode;
     public stream: MediaStream;
     public captureTimeout: any;
-    private  canvasHidden = true;
+    private canvasHidden = true;
     get isCanvasSupported(): boolean {
         const canvas = this.renderer.createElement('canvas');
         return !!(canvas.getContext && canvas.getContext('2d'));
@@ -68,12 +68,12 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        if (this.debug) console.log('[QrScanner] ViewInit, isSupported: ', this.isCanvasSupported);
+        if (this.debug) { console.log('[QrScanner] ViewInit, isSupported: ', this.isCanvasSupported); }
         if (this.isCanvasSupported) {
             this.gCtx = this.qrCanvas.nativeElement.getContext('2d');
             this.gCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
             this.qrCode = new QRCode();
-            if (this.debug) this.qrCode.debug = true;
+            if (this.debug) { this.qrCode.debug = true; }
             this.qrCode.myCallback = (decoded: string) => this.QrDecodeCallback(decoded);
         }
         this.chooseCamera$ = this.chooseCamera.subscribe((camera: MediaDeviceInfo) => this.useDevice(camera));
@@ -94,17 +94,17 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
 
         const stream = this.stream && this.stream.getTracks().length && this.stream;
         if (stream) {
-            stream.getTracks().forEach(track => track.enabled && track.stop())
+            stream.getTracks().forEach(track => track.enabled && track.stop());
             this.stream = null;
         }
     }
 
     getMediaDevices(): Promise<MediaDeviceInfo[]> {
-        if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return Promise.resolve([]);
+        if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) { return Promise.resolve([]); }
         return navigator.mediaDevices.enumerateDevices()
             .then((devices: MediaDeviceInfo[]) => devices)
             .catch((error: any): any[] => {
-                if (this.debug) console.warn('Error', error);
+                if (this.debug) { console.warn('Error', error); }
                 return [];
             });
     }
@@ -126,8 +126,8 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
             this.gCtx.drawImage(this.videoElement, 0, 0, this.canvasWidth, this.canvasHeight);
             this.qrCode.decode(this.qrCanvas.nativeElement);
         } catch (e) {
-            if (this.debug) console.log('[QrScanner] Thrown', e);
-            if (!this.stream) return;
+            if (this.debug) { console.log('[QrScanner] Thrown', e); }
+            if (!this.stream) { return; }
             this.captureTimeout = setTimeout(() => this.captureToCanvas(), this.updateTime);
         }
     }
@@ -157,10 +157,10 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
 
         let constraints: MediaStreamConstraints;
         if (_device) {
-            constraints = {audio: false, video: {deviceId: _device.deviceId}};
+            constraints = { audio: false, video: { deviceId: _device.deviceId } };
         } else {
 
-            constraints = {audio: false, video: true};
+            constraints = { audio: false, video: true };
         }
         _navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
             self.setStream(stream);
