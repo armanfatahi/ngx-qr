@@ -1,6 +1,6 @@
 {
   "name": "ngx-qr",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "scripts": {
     "start": "ng serve --aot --host 0.0.0.0",
     "build": "ng-packagr -p ng-package.json",
@@ -13,7 +13,7 @@
   "main": "./src/index.ts",
   "repository": {
     "type": "git",
-    "url": "cd dishttps://github.com/goergch/angular2-qrscanner"
+    "url": "cd dishttps://github.com/armanfatahi/ngx-qr"
   },
   "author": {
     "name": "Arman Fatahi",
@@ -32,15 +32,15 @@
   ],
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/goergch/angular2-qrscanner/issues"
+    "url": "https://github.com/armanfatahi/ngx-qr/issues"
   },
   "dependencies": {},
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.8.0",
+    "@angular-devkit/build-angular": "^0.803.20",
     "@angular/cli": "^6.2.3",
     "@angular/common": "6.1.7",
     "@angular/compiler": "6.1.7",
-    "@angular/compiler-cli": "6.1.7",
+    "@angular/compiler-cli": "^8.2.14",
     "@angular/core": "6.1.7",
     "@angular/platform-browser": "6.1.7",
     "@angular/platform-browser-dynamic": "6.1.7",
@@ -53,7 +53,7 @@
     "codelyzer": "^4.4.4",
     "core-js": "^2.5.7",
     "moment": "~>2.19.3",
-    "ng-packagr": "^2.4.5",
+    "ng-packagr": "^5.7.1",
     "rxjs": "^6.3.2",
     "ssri": "~>5.2.2",
     "ts-node": "~4.1.0",
