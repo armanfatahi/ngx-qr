@@ -13,7 +13,7 @@
   "main": "./src/index.ts",
   "repository": {
     "type": "git",
-    "url": "cd dishttps://github.com/armanfatahi/ngx-qr"
+    "url": "https://github.com/armanfatahi/ngx-qr"
   },
   "author": {
     "name": "Arman Fatahi",
