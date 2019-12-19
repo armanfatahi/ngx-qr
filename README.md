@@ -1,16 +1,16 @@
-# angular2-qrscanner
+# ngx-qr
 QrScanner will scan for a QRCode from your Web-cam and return its
 string representation by drawing the captured image onto a 2D Canvas
 and use [@LazarSoft/jsqrcode](https://github.com/LazarSoft/jsqrcode) to check for a valid QRCode every *Xms*
 
 ### usage
 ```bash
-$ npm install --save angular2-qrscanner
+$ npm install --save ngx-qr
 ```
 
 ```typescript
 // app.module.ts
-import { NgQrScannerModule } from 'angular2-qrscanner';
+import { NgQrScannerModule } from 'ngx-qr';
 @NgModule({
   declarations: [
     // ...
@@ -43,7 +43,7 @@ export class AppModule { }
 // app.component.ts
 
 import {Component, ViewChild, ViewEncapsulation, OnInit} from '@angular/core';
-import {QrScannerComponent} from 'angular2-qrscanner';
+import {QrScannerComponent} from 'ngx-qr';
 
 @Component({
     selector: 'app-root',
