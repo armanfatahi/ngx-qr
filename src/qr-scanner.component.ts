@@ -16,8 +16,12 @@ import { QRCode } from './lib/qr-decoder/qrcode';
     template: `
         <ng-container [ngSwitch]="isCanvasSupported">
             <ng-container *ngSwitchDefault>
-                <canvas #qrCanvas [hidden]="canvasHidden" [width]="canvasWidth" [height]="canvasHeight"></canvas>
-                <div #videoWrapper [style.width]="canvasWidth" [style.height]="canvasHeight"></div>
+                <canvas #qrCanvas
+                [ngStyle]="{'maxWidth.px': canvasWidth, 'maxHeight.px': canvasHeight}"
+                [hidden]="canvasHidden" [width]="canvasWidth" [height]="canvasHeight"></canvas>
+                <div #videoWrapper
+                [ngStyle]="{'maxWidth.px': canvasWidth, 'maxHeight.px': canvasHeight}">
+                </div>
             </ng-container>
             <ng-container *ngSwitchCase="false">
                 <p>
@@ -29,8 +33,8 @@ import { QRCode } from './lib/qr-decoder/qrcode';
 })
 export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
 
-    @Input() canvasWidth = 640;
-    @Input() canvasHeight = 480;
+    @Input() canvasWidth: number;
+    @Input() canvasHeight: number;
     @Input() debug = false;
     @Input() stopAfterScan = true;
     @Input() updateTime = 500;
@@ -57,6 +61,8 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     constructor(private renderer: Renderer2) {
+        this.canvasWidth = this.canvasWidth || Math.min(window.innerWidth, 640);
+        this.canvasHeight = this.canvasHeight || Math.min(window.innerHeight, 480);
     }
 
     ngOnInit() {
@@ -70,7 +76,6 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
     ngAfterViewInit() {
         if (this.debug) { console.log('[QrScanner] ViewInit, isSupported: ', this.isCanvasSupported); }
         if (this.isCanvasSupported) {
-            debugger
             this.gCtx = this.qrCanvas.nativeElement.getContext('2d');
             this.gCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
             this.qrCode = new QRCode();
