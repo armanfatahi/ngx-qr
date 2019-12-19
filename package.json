@@ -1,5 +1,5 @@
 {
-  "name": "angular2-qrscanner",
+  "name": "ngx-qr",
   "version": "1.0.7",
   "scripts": {
     "start": "ng serve --aot --host 0.0.0.0",
@@ -16,12 +16,13 @@
     "url": "cd dishttps://github.com/goergch/angular2-qrscanner"
   },
   "author": {
-    "name": "Christian Görg",
-    "email": "goergc@gmx.de"
+    "name": "Arman Fatahi",
+    "email": "arman.fatahi@gmail.com"
   },
   "contributors": [
     "Mosh Mage <moshmage@gmail.com> (http://moshmage.gitlab.io)",
-    "Christian Görg <goergc@gmx.de> (http://github.com/goergch)"
+    "Christian Görg <goergc@gmx.de> (http://github.com/goergch)",
+    "Arman Fatahi <arman.fatahi@gmail.com> (http://github.com/armanfatahi)"
   ],
   "keywords": [
     "angular",
