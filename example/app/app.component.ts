@@ -9,7 +9,7 @@ import { QrScannerComponent } from '../../src';
 })
 export class AppComponent implements OnInit, AfterViewInit {
 
-    @ViewChild(QrScannerComponent) qrScannerComponent: QrScannerComponent;
+    @ViewChild(QrScannerComponent, { static: true }) qrScannerComponent: QrScannerComponent;
 
 
     decodedOutput(text: string) {

@@ -69,20 +69,20 @@ export class QRCodeDataBlockReader {
 
 				case MODE_NUMBER:
 					// canvas.println("Mode: Figure");
-					let temp_str = this.getFigureString(dataLength);
-					let ta = new Array(temp_str.length);
-					for (let j = 0; j < temp_str.length; j++) {
-						ta[j] = temp_str.charCodeAt(j);
+					const temp_str1 = this.getFigureString(dataLength);
+					let ta1 = new Array(temp_str1.length);
+					for (let j = 0; j < temp_str1.length; j++) {
+						ta1[j] = temp_str1.charCodeAt(j);
 					}
-					output.push(ta);
+					output.push(ta1);
 					break;
 
 				case MODE_ROMAN_AND_NUMBER:
 					// canvas.println("Mode: Roman&Figure");
-					let temp_str = this.getRomanAndFigureString(dataLength);
-					const ta = new Array(temp_str.length);
-					for (let j = 0; j < temp_str.length; j++) {
-						ta[j] = temp_str.charCodeAt(j);
+					const temp_str2 = this.getRomanAndFigureString(dataLength);
+					const ta = new Array(temp_str2.length);
+					for (let j = 0; j < temp_str2.length; j++) {
+						ta[j] = temp_str2.charCodeAt(j);
 					}
 					output.push(ta );
 					// output.Write(SystemUtils.ToByteArray(temp_sbyteArray2), 0, temp_sbyteArray2.Length);

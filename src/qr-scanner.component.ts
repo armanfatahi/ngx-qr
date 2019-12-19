@@ -38,8 +38,8 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
     @Output() capturedQr: EventEmitter<string> = new EventEmitter();
     @Output() foundCameras: EventEmitter<MediaDeviceInfo[]> = new EventEmitter();
 
-    @ViewChild('videoWrapper') videoWrapper: ElementRef;
-    @ViewChild('qrCanvas') qrCanvas: ElementRef;
+    @ViewChild('videoWrapper', { static: false }) videoWrapper: ElementRef;
+    @ViewChild('qrCanvas', { static: false }) qrCanvas: ElementRef;
 
     @Input() chooseCamera: Subject<MediaDeviceInfo> = new Subject();
 
@@ -50,7 +50,7 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
     public qrCode: QRCode;
     public stream: MediaStream;
     public captureTimeout: any;
-    private canvasHidden = true;
+    public canvasHidden = true;
     get isCanvasSupported(): boolean {
         const canvas = this.renderer.createElement('canvas');
         return !!(canvas.getContext && canvas.getContext('2d'));
@@ -70,6 +70,7 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
     ngAfterViewInit() {
         if (this.debug) { console.log('[QrScanner] ViewInit, isSupported: ', this.isCanvasSupported); }
         if (this.isCanvasSupported) {
+            debugger
             this.gCtx = this.qrCanvas.nativeElement.getContext('2d');
             this.gCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
             this.qrCode = new QRCode();
@@ -124,6 +125,7 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
     private captureToCanvas() {
         try {
             this.gCtx.drawImage(this.videoElement, 0, 0, this.canvasWidth, this.canvasHeight);
+
             this.qrCode.decode(this.qrCanvas.nativeElement);
         } catch (e) {
             if (this.debug) { console.log('[QrScanner] Thrown', e); }

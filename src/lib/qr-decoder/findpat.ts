@@ -465,7 +465,7 @@ export class FinderPatternFinder {
 		const average = totalModuleSize / max;
 		let totalDeviation = 0.0;
 		for (let i = 0; i < max; i++) {
-			pattern = this.possibleCenters[i];
+			const pattern = this.possibleCenters[i];
 			totalDeviation += Math.abs(pattern.EstimatedModuleSize - average);
 		}
 		return totalDeviation <= 0.05 * totalModuleSize;
