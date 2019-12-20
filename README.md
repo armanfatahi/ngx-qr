@@ -22,7 +22,7 @@ export class AppModule { }
 
 ```html
 <!-- app.component.html -->
-<qr-scanner [capturedQr]="capturedQr($event)"></qr-scanner>
+<qr-scanner (capturedQr)="capturedQr($event)"></qr-scanner>
 
 ```
 
@@ -56,7 +56,7 @@ Provide the following texts:
 ```html
 <!-- app.component.html -->
 <qr-scanner 
-    [capturedQr]="capturedQr($event)"
+    (capturedQr)="capturedQr($event)"
     [texts]="{
         NotSupportedHTML: `You are using an <strong>outdated</strong> browser.`,
         DeviceDefaultPrefix: `Camera`,
@@ -72,7 +72,7 @@ Button styles can be changed:
 ```html
 <!-- app.component.html -->
 <qr-scanner 
-    [capturedQr]="capturedQr($event)"
+    (capturedQr)="capturedQr($event)"
     [buttonClass]="'ngClassForButtons'"    
 ></qr-scanner>
 
