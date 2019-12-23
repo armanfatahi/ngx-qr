@@ -1,7 +1,7 @@
 import {
   AfterViewInit,
   Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output,
-  ViewChild, Renderer2
+  ViewChild, Renderer2, ViewEncapsulation
 } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { QRCode } from './lib/qr-decoder/qrcode';
@@ -49,7 +49,8 @@ export interface QrScannerTexts {
         </div>
       </div>
     </div>
-      `
+      `,
+  encapsulation: ViewEncapsulation.None
 })
 export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
 
