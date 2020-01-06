@@ -16,6 +16,7 @@ export interface QrScannerTexts {
   NotSupportedHTML: string;
   DeviceDefaultPrefix: string;
   StopCameraText: string;
+  OpenButtonText: string;
 }
 
 @Component({
@@ -23,30 +24,36 @@ export interface QrScannerTexts {
   styles: [
     ':host video {height: auto; width: 100%;}',
     ':host .mirrored { transform: rotateY(180deg); -webkit-transform:rotateY(180deg); -moz-transform:rotateY(180deg); }',
-    ':host {}'
+    ':host {}',
+    '.cameraButtonDiv { position: absolute;align-content: center;width: 100%;padding: 5px 0px; z-index: 1000; }',
+    '.buttonDiv { margin: 20px 0px;}'
   ],
   template: `
     <div style="text-align: -webkit-center;">
       <div [ngStyle]="{display: state === State.NotSupported ? 'block' : 'none'}">
         <p [innerHTML]="texts.NotSupportedHTML"></p>
       </div>
-      <div [ngStyle]="{display: state === State.SelectCamera ? 'block' : 'none'}">
-        <button *ngFor="let device of cameraList; let i = index;" (click)="changeCamera(device)" [ngClass]="buttonClass">
-          {{ getLabel(device, i) }}
-        </button>
+      <div class="cameraButtonDiv" [ngStyle]="{display: state === State.SelectCamera ? 'block' : 'none'}">
+        <div class="buttonDiv" *ngIf="allowUpload">
+          <app-qrupload [title]="texts.OpenButtonText" (valueChange)="scanned($event)" [buttonClass]='buttonClass'></app-qrupload>
+        </div>
+        <div *ngFor="let device of cameraList; let i = index;" class="buttonDiv">
+          <button (click)="changeCamera(device)" [ngClass]="buttonClass">
+            {{ getLabel(device, i + 1) }}
+          </button>
+        </div>
       </div>
       <div [ngStyle]="{display: state === State.Scan ? 'block' : 'none'}">
+        <div class="cameraButtonDiv">
+          <button (click)="stop()" [ngClass]="buttonClass">
+            {{ texts.StopCameraText }}
+          </button>
+        </div>
         <div #videoWrapper [ngStyle]="{'maxWidth.px': canvasWidth, 'maxHeight.px': canvasHeight}">
         </div>
         <canvas #qrCanvas
         [ngStyle]="{'maxWidth.px': canvasWidth, 'maxHeight.px': canvasHeight}"
         [hidden]="true" [width]="canvasWidth" [height]="canvasHeight"></canvas>
-        <hr>
-        <div>
-          <button (click)="stop()" [ngClass]="buttonClass">
-            {{ texts.StopCameraText }}
-          </button>
-        </div>
       </div>
     </div>
       `,
@@ -65,9 +72,11 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
     NotSupportedHTML: `You are using an <strong>outdated</strong> browser.
     Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.`,
     DeviceDefaultPrefix: `Camera`,
-    StopCameraText: `Stop Camera`
+    StopCameraText: `Stop Camera`,
+    OpenButtonText: `Select QR Code File...`
   };
   @Input() buttonClass: any;
+  @Input() allowUpload = false;
 
   @Output() capturedQr: EventEmitter<string> = new EventEmitter();
   @ViewChild('videoWrapper', { static: false }) videoWrapper: ElementRef;
@@ -118,7 +127,7 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
     this.getMediaDevices().then(devices => {
       const mediaVideoKind = 'videoinput';
 
-      this.cameraList = devices.filter((d: MediaDeviceInfo) => d.kind === mediaVideoKind);
+      this.cameraList = devices.filter((d: MediaDeviceInfo) => d && d.kind === mediaVideoKind);
     });
   }
 
@@ -174,8 +183,13 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
     this.stopScanning();
     this.capturedQr.next(decoded);
     this.state = State.SelectCamera;
-    this.stopScanning();
+  }
 
+
+  async scanned(decoded: string) {
+    this.stopScanning();
+    this.capturedQr.next(decoded);
+    this.state = State.SelectCamera;
   }
 
   private captureToCanvas() {

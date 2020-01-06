@@ -1,0 +1,4 @@
+<label for="qr_upload" [ngClass]="buttonClass">
+  {{ title }}</label>
+<br>
+<input type="file" name="qr_upload" id="qr_upload" class="upload" accept="image/*" (change)="pick($event)" />

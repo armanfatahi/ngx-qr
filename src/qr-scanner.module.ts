@@ -1,12 +1,13 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { QrScannerComponent } from './qr-scanner.component';
+import { QrUploadComponent } from './lib/qrupload/qrupload.component';
 
 @NgModule({
   imports: [
     CommonModule
   ],
-  declarations: [QrScannerComponent],
+  declarations: [QrScannerComponent, QrUploadComponent],
   exports: [QrScannerComponent]
 })
 export class NgQrScannerModule {

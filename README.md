@@ -53,6 +53,15 @@ export class AppComponent implements OnInit, AfterViewInit {
 
 Provide the following texts:
 
+```ts
+export interface QrScannerTexts {
+  NotSupportedHTML: string;
+  DeviceDefaultPrefix: string;
+  StopCameraText: string;
+  OpenButtonText: string;
+}
+```
+
 ```html
 <!-- app.component.html -->
 <qr-scanner 
@@ -60,7 +69,8 @@ Provide the following texts:
     [texts]="{
         NotSupportedHTML: `You are using an <strong>outdated</strong> browser.`,
         DeviceDefaultPrefix: `Camera`,
-        StopCameraText: `Stop Camera` }"    
+        StopCameraText: `Stop Camera`,
+        OpenButtonText: `Open QR Code File...` }"    
 ></qr-scanner>
 
 ```
@@ -74,6 +84,18 @@ Button styles can be changed:
 <qr-scanner 
     (capturedQr)="capturedQr($event)"
     [buttonClass]="'ngClassForButtons'"    
+></qr-scanner>
+
+```
+#### Upload QR Feature
+
+You can let users upload a QR code using:
+
+```html
+<!-- app.component.html -->
+<qr-scanner 
+    (capturedQr)="capturedQr($event)"
+    [allowUpload]="true"
 ></qr-scanner>
 
 ```
