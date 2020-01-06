@@ -1,6 +1,6 @@
 {
   "name": "ngx-qr",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "scripts": {
     "start": "ng serve --aot --host 0.0.0.0",
     "build": "ng-packagr -p ng-package.json",
