@@ -19,6 +19,7 @@ export class QrUploadComponent {
   }
 
   qrCode = new QRCode();
+  width = 555;
 
   @Output() valueChange = new EventEmitter<string>();
   @Input() buttonClass: any;
@@ -32,8 +33,8 @@ export class QrUploadComponent {
 
 
   constructor() {
-    this.img.width = 555;
-    this.img.height = 555;
+    this.img.width = this.width;
+    this.img.height = this.width;
 
   }
 
@@ -57,8 +58,8 @@ export class QrUploadComponent {
     this.img.onload = () => {
       try {
         const qrCanvas = document.createElement('canvas');
-        qrCanvas.width = 555;
-        qrCanvas.height = 555;
+        qrCanvas.width = this.width;
+        qrCanvas.height = this.width;
         const gCtx = qrCanvas.getContext('2d');
         gCtx.drawImage(this.img, 0, 0);
         const decoded = this.qrCode.decode(qrCanvas);

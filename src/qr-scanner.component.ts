@@ -33,14 +33,16 @@ export interface QrScannerTexts {
       <div [ngStyle]="{display: state === State.NotSupported ? 'block' : 'none'}">
         <p [innerHTML]="texts.NotSupportedHTML"></p>
       </div>
-      <div class="cameraButtonDiv" [ngStyle]="{display: state === State.SelectCamera ? 'block' : 'none'}">
-        <div class="buttonDiv" *ngIf="allowUpload">
+      <div class="cameraButtonDiv" [ngStyle]="{display: state === State.SelectCamera ? 'block' : 'none'}" *ngIf="allowUpload">
+        <div class="buttonDiv">
           <app-qrupload [title]="texts.OpenButtonText" (valueChange)="scanned($event)" [buttonClass]='buttonClass'></app-qrupload>
         </div>
-        <div *ngFor="let device of cameraList; let i = index;" class="buttonDiv">
-          <button (click)="changeCamera(device)" [ngClass]="buttonClass">
-            {{ getLabel(device, i + 1) }}
-          </button>
+        <div *ngIf="!disableScan">
+          <div *ngFor="let device of cameraList; let i = index;" class="buttonDiv">
+            <button (click)="changeCamera(device)" [ngClass]="buttonClass">
+              {{ getLabel(device, i + 1) }}
+            </button>
+          </div>
         </div>
       </div>
       <div [ngStyle]="{display: state === State.Scan ? 'block' : 'none'}">
@@ -77,6 +79,7 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
   };
   @Input() buttonClass: any;
   @Input() allowUpload = false;
+  @Input() disableScan = false;
 
   @Output() capturedQr: EventEmitter<string> = new EventEmitter();
   @ViewChild('videoWrapper', { static: false }) videoWrapper: ElementRef;

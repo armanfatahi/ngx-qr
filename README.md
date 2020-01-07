@@ -70,8 +70,8 @@ export interface QrScannerTexts {
         NotSupportedHTML: `You are using an <strong>outdated</strong> browser.`,
         DeviceDefaultPrefix: `Camera`,
         StopCameraText: `Stop Camera`,
-        OpenButtonText: `Open QR Code File...` }"    
-></qr-scanner>
+        OpenButtonText: `Open QR Code File...` }">
+</qr-scanner>
 
 ```
 
@@ -83,8 +83,8 @@ Button styles can be changed:
 <!-- app.component.html -->
 <qr-scanner 
     (capturedQr)="capturedQr($event)"
-    [buttonClass]="'ngClassForButtons'"    
-></qr-scanner>
+    [buttonClass]="'ngClassForButtons'">
+</qr-scanner>
 
 ```
 #### Upload QR Feature
@@ -95,7 +95,18 @@ You can let users upload a QR code using:
 <!-- app.component.html -->
 <qr-scanner 
     (capturedQr)="capturedQr($event)"
+    [allowUpload]="true">
+</qr-scanner>
+
+```
+If you only need upload QR feature, you can use the following:
+
+```html
+<!-- app.component.html -->
+<qr-scanner 
+    (capturedQr)="capturedQr($event)"
     [allowUpload]="true"
-></qr-scanner>
+    [disableScan]="true">
+</qr-scanner>
 
 ```
