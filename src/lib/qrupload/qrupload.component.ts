@@ -19,7 +19,6 @@ export class QrUploadComponent {
   }
 
   qrCode = new QRCode();
-  width = 555;
 
   @Output() valueChange = new EventEmitter<string>();
   @Input() buttonClass: any;
@@ -31,46 +30,34 @@ export class QrUploadComponent {
   ];
   img = new Image();
 
-
-  constructor() {
-    this.img.width = this.width;
-    this.img.height = this.width;
-
-  }
+  constructor() {  }
 
   pick(evt) {
     const file = (evt.target.files[0] as File);
     if (!file) {
       return;
     }
-    const that = this;
     const reader = new FileReader();
-    reader.onload = function (event: any) {
+    reader.onload = (event: any) => {
       const target = event.target;
       const url = target.result;
-      that.read(url);
+      this.read(url);
     };
     reader.readAsDataURL(file);
   }
-
 
   async read(url: string) {
     this.img.onload = () => {
       try {
         const qrCanvas = document.createElement('canvas');
-        qrCanvas.width = this.width;
-        qrCanvas.height = this.width;
+        qrCanvas.width = this.img.width;
+        qrCanvas.height = this.img.height;
         const gCtx = qrCanvas.getContext('2d');
         gCtx.drawImage(this.img, 0, 0);
         const decoded = this.qrCode.decode(qrCanvas);
-        if (decoded) {
-          this.value = decoded;
-        } else {
-          console.log('Invalid QR');
-        }
+        this.value = decoded;
       } catch (error) {
-        console.log(error);
-        console.log('Invalid QR');
+        this.value = undefined;
       }
     };
     this.img.src = url;
