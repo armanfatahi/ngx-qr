@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
 export class AppComponent {
 
     capturedQr(result: string) {
+        alert(result);
         console.log(result);
     }
 

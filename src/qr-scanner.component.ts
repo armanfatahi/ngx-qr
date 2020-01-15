@@ -35,7 +35,8 @@ export interface QrScannerTexts {
       </div>
       <div class="cameraButtonDiv" [ngStyle]="{display: state === State.SelectCamera ? 'block' : 'none'}" *ngIf="allowUpload">
         <div class="buttonDiv">
-          <app-qrupload [title]="texts.OpenButtonText" (valueChange)="scanned($event)" [buttonClass]='buttonClass'></app-qrupload>
+          <app-qrupload [title]="texts.OpenButtonText"
+          (error)="onUploadError($event)" (valueChange)="scanned($event)" [buttonClass]='buttonClass'></app-qrupload>
         </div>
         <div *ngIf="!disableScan">
           <div *ngFor="let device of cameraList; let i = index;" class="buttonDiv">
@@ -82,6 +83,7 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() disableScan = false;
 
   @Output() capturedQr: EventEmitter<string> = new EventEmitter();
+  @Output() error: EventEmitter<any> = new EventEmitter();
   @ViewChild('videoWrapper', { static: false }) videoWrapper: ElementRef;
   @ViewChild('qrCanvas', { static: false }) qrCanvas: ElementRef;
 
@@ -107,6 +109,10 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+  }
+
+  onUploadError(error) {
+    this.error.emit(error);
   }
 
   ngOnDestroy() {
@@ -148,13 +154,20 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   changeCamera(device: MediaDeviceInfo) {
-    this.chooseCamera.next(device);
-    this.state = State.Scan;
-
+    try {
+      this.chooseCamera.next(device);
+      this.state = State.Scan;
+    } catch (err) {
+      this.error.emit(err);
+    }
   }
 
   startScanning(device: MediaDeviceInfo) {
-    this.useDevice(device);
+    try {
+      this.useDevice(device);
+    } catch (error) {
+      this.error.emit(error);
+    }
   }
 
   stopScanning() {
@@ -173,13 +186,19 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getMediaDevices(): Promise<MediaDeviceInfo[]> {
-    if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) { return Promise.resolve([]); }
-    return navigator.mediaDevices.enumerateDevices()
-      .then((devices: MediaDeviceInfo[]) => devices)
-      .catch((error: any): any[] => {
-        if (this.debug) { console.warn('Error', error); }
-        return [];
-      });
+    try {
+
+      if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) { return Promise.resolve([]); }
+      return navigator.mediaDevices.enumerateDevices()
+        .then((devices: MediaDeviceInfo[]) => devices)
+        .catch((error: any): any[] => {
+          if (this.debug) { console.warn('Error', error); }
+          return [];
+        });
+    } catch (err) {
+      this.error.emit(err);
+    }
+
   }
 
   public QrDecodeCallback(decoded: string) {
@@ -201,6 +220,7 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
 
       this.qrCode.decode(this.qrCanvas.nativeElement);
     } catch (e) {
+      this.error.emit(e);
       if (this.debug) { console.log('[QrScanner] Thrown', e); }
       if (!this.stream) { return; }
       this.captureTimeout = setTimeout(() => this.captureToCanvas(), this.updateTime);
@@ -216,32 +236,37 @@ export class QrScannerComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private useDevice(_device: MediaDeviceInfo) {
-    const _navigator: any = navigator;
+    try {
 
-    if (this.captureTimeout) {
-      this.stopScanning();
+      const _navigator: any = navigator;
+
+      if (this.captureTimeout) {
+        this.stopScanning();
+      }
+
+      if (!this.videoElement) {
+        this.videoElement = this.renderer.createElement('video');
+        this.videoElement.setAttribute('autoplay', 'true');
+        this.videoElement.setAttribute('muted', 'true');
+        this.renderer.appendChild(this.videoWrapper.nativeElement, this.videoElement);
+      }
+      const self = this;
+
+      let constraints: MediaStreamConstraints;
+      if (_device) {
+        constraints = { audio: false, video: { deviceId: _device.deviceId } };
+      } else {
+
+        constraints = { audio: false, video: true };
+      }
+      _navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
+        self.setStream(stream);
+      }).catch(function (err) {
+        return self.debug && console.warn('Error', err);
+      });
+    } catch (err) {
+      this.error.emit(err);
     }
-
-    if (!this.videoElement) {
-      this.videoElement = this.renderer.createElement('video');
-      this.videoElement.setAttribute('autoplay', 'true');
-      this.videoElement.setAttribute('muted', 'true');
-      this.renderer.appendChild(this.videoWrapper.nativeElement, this.videoElement);
-    }
-    const self = this;
-
-    let constraints: MediaStreamConstraints;
-    if (_device) {
-      constraints = { audio: false, video: { deviceId: _device.deviceId } };
-    } else {
-
-      constraints = { audio: false, video: true };
-    }
-    _navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-      self.setStream(stream);
-    }).catch(function (err) {
-      return self.debug && console.warn('Error', err);
-    });
   }
 
 }

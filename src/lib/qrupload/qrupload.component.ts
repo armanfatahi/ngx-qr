@@ -21,6 +21,7 @@ export class QrUploadComponent {
   qrCode = new QRCode();
 
   @Output() valueChange = new EventEmitter<string>();
+  @Output() error = new EventEmitter<any>();
   @Input() buttonClass: any;
   @Input() title: string;
   acceptedMimeTypes = [
@@ -30,7 +31,7 @@ export class QrUploadComponent {
   ];
   img = new Image();
 
-  constructor() {  }
+  constructor() { }
 
   pick(evt) {
     const file = (evt.target.files[0] as File);
@@ -57,6 +58,7 @@ export class QrUploadComponent {
         const decoded = this.qrCode.decode(qrCanvas);
         this.value = decoded;
       } catch (error) {
+        this.error.emit(error);
         this.value = undefined;
       }
     };

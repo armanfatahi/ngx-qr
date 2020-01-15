@@ -110,3 +110,16 @@ If you only need upload QR feature, you can use the following:
 </qr-scanner>
 
 ```
+
+#### Error handling
+
+Errors are shown on the error output:
+
+```html
+<!-- app.component.html -->
+<qr-scanner 
+    (error)="onError($event)"
+    (capturedQr)="capturedQr($event)">
+</qr-scanner>
+
+```
