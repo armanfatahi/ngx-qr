@@ -55,7 +55,7 @@
     "codelyzer": "^5.0.1",
     "core-js": "^2.5.7",
     "moment": "~>2.19.3",
-    "ng-packagr": "^5.4.0",
+    "ng-packagr": "^10.1.1",
     "rxjs": "^6.5.3",
     "ssri": "~>5.2.2",
     "ts-node": "~4.1.0",
