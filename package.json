@@ -54,7 +54,7 @@
     "@types/selenium-webdriver": "^3.0.10",
     "codelyzer": "^5.0.1",
     "core-js": "^2.5.7",
-    "moment": "~>2.19.3",
+    "moment": "~>2.29.2",
     "ng-packagr": "^5.4.0",
     "rxjs": "^6.5.3",
     "ssri": "~>5.2.2",
