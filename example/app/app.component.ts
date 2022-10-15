@@ -10,5 +10,8 @@ export class AppComponent {
         alert(result);
         console.log(result);
     }
+    capturedQrError(result) {
+        console.error(result);
+    }
 
 }

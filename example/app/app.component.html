@@ -1,2 +1,2 @@
-<qr-scanner 
-    [buttonClass]="'btn btn-danger'" [allowUpload]="true" [disableScan]="false"  (capturedQr)="capturedQr($event)" ></qr-scanner>
+<qr-scanner
+[buttonClass]="'btn btn-danger'" [allowUpload]="true" [disableScan]="false" (error)="capturedQrError($event)" (capturedQr)="capturedQr($event)" ></qr-scanner>
